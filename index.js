@@ -1,30 +1,19 @@
-const express = require("express")
-const app = express()
-const dotenv = require("dotenv")
+const express = require('express')
 const mongoose = require('mongoose')
-//! Import Routes
+const dotenv = require('dotenv')
+dotenv.config()
+const app = express()
+
+//! Import routes
 const authRoute = require('./routes/auth')
 
-dotenv.config()
+mongoose.connect(process.env.DB_CONNECT, {
+    useNewUrlParser: true
+}, () => console.log("db connected"))
 
-//! Connect to db
-mongoose.connect(
-    process.env.DB_CONNECT, {
-
-        useNewUrlParser: true,
-    
-        useCreateIndex: true,
-    
-        useFindAndModify: false,
-    
-        useUnifiedTopology: true
-    
-    }  ,
-    () => console.log("connected to db!",process.env.DB_CONNECT))
 
 //! Middleware
 app.use(express.json())
-//! Route Middleware
+//! Route middleware
 app.use('/api/user', authRoute)
-
-app.listen(3000, () => console.log('Server is running'))
+app.listen(3000, () => console.log('Server working'))
